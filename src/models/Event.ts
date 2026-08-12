@@ -1,0 +1,16 @@
+import { EventCatalog } from "./EventCatalog";
+
+interface Data {
+  displayName: string;
+  dataType: "TEXT" | "NUMBER" | "PHOTO" | "CORRAL" | "BOOLEAN";
+  content: any;
+}
+
+export interface Event {
+  id: number;
+  eventTypeId: number;
+  date: Date;
+  description: string;
+  animals?: string[];
+  additionals: Data[];
+}
