@@ -12,16 +12,8 @@ export const serviceOrders: ServiceOrder[] = [
     status: "Procesando",
     animalBreakdown: [
       {
-        quantity: 100,
+        quantity: 95,
         displayName: "vaca",
-      },
-      {
-        quantity: 50,
-        displayName: "toro",
-      },
-      {
-        quantity: 37,
-        displayName: "novillo",
       },
     ],
     events: [1, 2, 3, 4],
@@ -34,10 +26,6 @@ export const serviceOrders: ServiceOrder[] = [
     description: "Servicio de sacrificio kosher y cuarto frío",
     arrivalDate: new Date("2026-07-26"),
     animalBreakdown: [
-      {
-        quantity: 80,
-        displayName: "vaca",
-      },
       {
         quantity: 45,
         displayName: "toro",
@@ -60,11 +48,7 @@ export const serviceOrders: ServiceOrder[] = [
     arrivalDate: new Date("2026-07-26"),
     animalBreakdown: [
       {
-        quantity: 120,
-        displayName: "vaca",
-      },
-      {
-        quantity: 60,
+        quantity: 30,
         displayName: "toro",
       },
       {

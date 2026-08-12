@@ -14,7 +14,7 @@ export const users: User[] = [
   },
   {
     id: 2,
-    username: "entrada_op",
+    username: "entrada",
     name: "John Doe",
     password:
       "f6e0a1e2ac41945a9aa7ff8a8aaa0cebc12a3bcc981a929ad5cf810a090e11ae",
@@ -23,7 +23,7 @@ export const users: User[] = [
   },
   {
     id: 3,
-    username: "linea_op",
+    username: "linea",
     name: "Laura Jefyllish",
     password:
       "f6e0a1e2ac41945a9aa7ff8a8aaa0cebc12a3bcc981a929ad5cf810a090e11ae",
