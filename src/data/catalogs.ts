@@ -13,6 +13,12 @@ export const animalCatalog: Catalog[] = [
   { id: 3, displayName: "Novillo" },
 ];
 
+export const classCatalog: Catalog[] = [
+  { id: 1, displayName: "Choice" },
+  { id: 2, displayName: "Select" },
+  { id: 3, displayName: "Buena" },
+];
+
 export const serviceCatalog: Catalog[] = [
   { id: 1, displayName: "Sacrificio" },
   { id: 2, displayName: "Sacrificio Kosher" },
@@ -70,12 +76,12 @@ export const eventCatalog: EventCatalog[] = [
     displayName: "Recepción de animales",
     isAnimalRequired: false,
     configExtra: [
-      { displayName: "Animales recibidos", dataType: "CANTIDAD_ANIMALES" },
+      { displayName: "Animales recibidos", dataType: "INTEGER" },
       { displayName: "Sexo de animales recibidos", dataType: "SEXO" },
       { displayName: "Condiciones de llegada", dataType: "PHOTO" },
-      { displayName: "Peso de salida del rancho origen", dataType: "NUMBER" }, //KG
+      { displayName: "Peso de salida del rancho origen", dataType: "FLOAT" },
       { displayName: "Hora de salida del rancho origen", dataType: "TIME" },
-      { displayName: "Kilos de llegada", dataType: "NUMBER" }, //KG
+      { displayName: "Kilos de llegada", dataType: "FLOAT" },
       { displayName: "Fleje", dataType: "PHOTO" },
       { displayName: "Corral Asignado", dataType: "CORRAL" },
       { displayName: "Foto animales en corral", dataType: "PHOTO" },
@@ -114,8 +120,8 @@ export const eventCatalog: EventCatalog[] = [
     isAnimalRequired: true, //Consecutivo
     configExtra: [
       { displayName: "Motivo", dataType: "MOTIVO_VISCERA" },
-      { displayName: "Cantidad de piezas", dataType: "NUMBER" }, //INT
-      { displayName: "Peso decomisado", dataType: "NUMBER" }, //KG
+      { displayName: "Cantidad de piezas", dataType: "INTEGER" },
+      { displayName: "Peso decomisado", dataType: "FLOAT" },
       { displayName: "Foto producto", dataType: "PHOTO" },
     ],
   },
@@ -137,7 +143,7 @@ export const eventCatalog: EventCatalog[] = [
     isAnimalRequired: false,
     configExtra: [
       { displayName: "Placas camión de salida", dataType: "FOTO" },
-      { displayName: "Temperatura de la unidad", dataType: "NUMBER" }, //C o F
+      { displayName: "Temperatura de la unidad", dataType: "FLOAT" },
     ],
   },
   {

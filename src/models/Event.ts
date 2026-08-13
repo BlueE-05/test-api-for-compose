@@ -2,7 +2,7 @@ import { EventCatalog } from "./EventCatalog";
 
 interface Data {
   displayName: string;
-  dataType: "TEXT" | "NUMBER" | "PHOTO" | "CORRAL" | "BOOLEAN";
+  dataType: "TEXT" | "INTEGER" | "FLOAT" | "PHOTO" | "CORRAL" | "BOOLEAN";
   content: any;
 }
 

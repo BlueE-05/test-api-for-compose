@@ -9,8 +9,8 @@ export const events: Event[] = [
     animals: [],
     additionals: [
       { displayName: "Fleje", dataType: "PHOTO", content: [1] },
-      { displayName: "Kilos de llegada", dataType: "NUMBER", content: 1500 },
-      { displayName: "Animales recibidos", dataType: "NUMBER", content: 100 },
+      { displayName: "Kilos de llegada", dataType: "FLOAT", content: 1500 },
+      { displayName: "Animales recibidos", dataType: "INTEGER", content: 100 },
       {
         displayName: "Sexo de animales recibidos",
         dataType: "TEXT",

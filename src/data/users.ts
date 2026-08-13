@@ -39,6 +39,6 @@ export const users: User[] = [
     password:
       "f6e0a1e2ac41945a9aa7ff8a8aaa0cebc12a3bcc981a929ad5cf810a090e11ae",
     role: "Operador de línea",
-    events: [5, 6, 7],
+    events: [5, 6, 7, 8, 9, 10, 11],
   },
 ];
