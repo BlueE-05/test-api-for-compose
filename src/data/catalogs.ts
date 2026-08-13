@@ -130,7 +130,7 @@ export const eventCatalog: EventCatalog[] = [
     id: 8,
     displayName: "Eventualidad en estancia",
     isAnimalRequired: true,
-    configExtra: [{ displayName: "Corral", dataType: "CORRAL" }], //Checar
+    configExtra: [{ displayName: "Corral", dataType: "CORRAL_SELECT" }], //Checar
   },
   {
     id: 9,
