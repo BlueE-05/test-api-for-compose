@@ -34,4 +34,11 @@ export const ServiceOrdersController = {
     res.status(200).json(events);
     return events;
   },
+
+  // async createEventForServiceOrder(
+  //   req: Request,
+  //   res: Response,
+  // ): Promise<SanityMessage> {
+  //   const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  //   return
 };

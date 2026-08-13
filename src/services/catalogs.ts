@@ -4,6 +4,8 @@ import {
   serviceCatalog,
   eventCatalog,
   corralCatalog,
+  motivosVisceraCatalog,
+  motivosCanalCatalog,
 } from "../data/catalogs";
 
 import { Catalog } from "../models/Catalog";
@@ -40,5 +42,10 @@ export const CatalogService = {
   // Corral Catalog
   async getCorralCatalog(): Promise<Catalog[]> {
     return [...corralCatalog];
+  },
+
+  // Motivos Catalog
+  async getMotivosCatalog(isCanal: boolean): Promise<Catalog[]> {
+    return isCanal ? [...motivosCanalCatalog] : [...motivosVisceraCatalog];
   },
 };

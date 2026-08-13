@@ -73,4 +73,9 @@ export const CatalogController = {
   getCorrals(req: Request, res: Response) {
     return sendCatalog(res, CatalogService.getCorralCatalog);
   },
+
+  getMotivos(req: Request, res: Response) {
+    const isCanal: boolean = req.path.includes("canal");
+    return sendCatalog(res, () => CatalogService.getMotivosCatalog(isCanal));
+  },
 };

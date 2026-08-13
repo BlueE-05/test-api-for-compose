@@ -21,54 +21,22 @@ export const serviceCatalog: Catalog[] = [
   { id: 5, displayName: "Limpieza de vísceras" },
 ];
 
-export const eventCatalog: EventCatalog[] = [
-  {
-    id: 1,
-    displayName: "Recepción de animales",
-    isAnimalRequired: false,
-    configExtra: [
-      { displayName: "Fleje", dataType: "PHOTO" },
-      { displayName: "Kilos de llegada", dataType: "NUMBER" },
-      { displayName: "Animales recibidos", dataType: "NUMBER" },
-      { displayName: "Sexo de animales recibidos", dataType: "TEXT" },
-      { displayName: "Número de Corral Asignado", dataType: "NUMBER" },
-    ],
-  },
-  {
-    id: 2,
-    displayName: "Recepción de documentos",
-    isAnimalRequired: false,
-    configExtra: [
-      { displayName: "Guía REMO", dataType: "PHOTO" },
-      { displayName: "Certificado Zoosanitario", dataType: "PHOTO" },
-      { displayName: "Licencia Chofer", dataType: "PHOTO" },
-      { displayName: "Placas Camión", dataType: "TEXT" },
-    ],
-  },
-  {
-    id: 3,
-    displayName: "Animal caído",
-    isAnimalRequired: true,
-    configExtra: null,
-  },
-  {
-    id: 4,
-    displayName: "Decomiso",
-    isAnimalRequired: true,
-    configExtra: null,
-  },
-  {
-    id: 5,
-    displayName: "Animal atorado",
-    isAnimalRequired: true,
-    configExtra: null,
-  },
-  {
-    id: 6,
-    displayName: "Neonato",
-    isAnimalRequired: true,
-    configExtra: null,
-  },
+export const motivosCanalCatalog: Catalog[] = [
+  { id: 1, displayName: "Tuberculosis" },
+  { id: 2, displayName: "Residuos de medicamentos" },
+  { id: 3, displayName: "Parasitosis" },
+  { id: 4, displayName: "Contaminación" },
+];
+
+export const motivosVisceraCatalog: Catalog[] = [
+  { id: 1, displayName: "Neumonía" },
+  { id: 2, displayName: "Parásitos" },
+  { id: 3, displayName: "Abscesos" },
+  { id: 4, displayName: "Adherencias" },
+  { id: 5, displayName: "Hepatitis" },
+  { id: 6, displayName: "Contaminación" },
+  { id: 7, displayName: "Necrosis" },
+  { id: 8, displayName: "Úlceras" },
 ];
 
 export const corralCatalog: Catalog[] = [
@@ -82,4 +50,100 @@ export const corralCatalog: Catalog[] = [
   { id: 8, displayName: "Corral 8" },
   { id: 9, displayName: "Corral 9" },
   { id: 10, displayName: "Corral 10" },
+];
+
+export const eventCatalog: EventCatalog[] = [
+  {
+    id: 1,
+    displayName: "Recepción de documentos",
+    isAnimalRequired: false,
+    configExtra: [
+      { displayName: "Guía REMO", dataType: "PHOTO" },
+      { displayName: "Certificado Zoosanitario", dataType: "PHOTO" },
+      { displayName: "Licencia Chofer", dataType: "PHOTO" },
+      { displayName: "Placas Camión", dataType: "PHOTO" },
+      { displayName: "Certificado Buenas prácticas", dataType: "PHOTO" },
+    ],
+  },
+  {
+    id: 2,
+    displayName: "Recepción de animales",
+    isAnimalRequired: false,
+    configExtra: [
+      { displayName: "Animales recibidos", dataType: "CANTIDAD_ANIMALES" },
+      { displayName: "Sexo de animales recibidos", dataType: "SEXO" },
+      { displayName: "Condiciones de llegada", dataType: "PHOTO" },
+      { displayName: "Peso de salida del rancho origen", dataType: "NUMBER" }, //KG
+      { displayName: "Hora de salida del rancho origen", dataType: "TIME" },
+      { displayName: "Kilos de llegada", dataType: "NUMBER" }, //KG
+      { displayName: "Fleje", dataType: "PHOTO" },
+      { displayName: "Corral Asignado", dataType: "CORRAL" },
+      { displayName: "Foto animales en corral", dataType: "PHOTO" },
+    ],
+  },
+  {
+    id: 3,
+    displayName: "Animal caído en jaula",
+    isAnimalRequired: true,
+    configExtra: [{ displayName: "Foto animal", dataType: "PHOTO" }],
+  },
+  {
+    id: 4,
+    displayName: "Desviación",
+    isAnimalRequired: false,
+    configExtra: [{ displayName: "Evidencias", dataType: "PHOTO" }],
+  },
+  {
+    id: 5,
+    displayName: "Animal caído en corral",
+    isAnimalRequired: true,
+    configExtra: [{ displayName: "Foto animal", dataType: "PHOTO" }],
+  },
+  {
+    id: 6,
+    displayName: "Decomiso de canal",
+    isAnimalRequired: true, //Consecutivo
+    configExtra: [
+      { displayName: "Motivo", dataType: "MOTIVO_CANAL" },
+      { displayName: "Foto producto", dataType: "PHOTO" },
+    ],
+  },
+  {
+    id: 7,
+    displayName: "Decomiso de viscera",
+    isAnimalRequired: true, //Consecutivo
+    configExtra: [
+      { displayName: "Motivo", dataType: "MOTIVO_VISCERA" },
+      { displayName: "Cantidad de piezas", dataType: "NUMBER" }, //INT
+      { displayName: "Peso decomisado", dataType: "NUMBER" }, //KG
+      { displayName: "Foto producto", dataType: "PHOTO" },
+    ],
+  },
+  {
+    id: 8,
+    displayName: "Eventualidad en estancia",
+    isAnimalRequired: true,
+    configExtra: [{ displayName: "Corral", dataType: "CORRAL" }], //Checar
+  },
+  {
+    id: 9,
+    displayName: "Parto",
+    isAnimalRequired: false,
+    configExtra: null,
+  },
+  {
+    id: 10,
+    displayName: "Embarque",
+    isAnimalRequired: false,
+    configExtra: [
+      { displayName: "Placas camión de salida", dataType: "FOTO" },
+      { displayName: "Temperatura de la unidad", dataType: "NUMBER" }, //C o F
+    ],
+  },
+  {
+    id: 11,
+    displayName: "Desviaciones de embarque",
+    isAnimalRequired: false,
+    configExtra: [{ displayName: "Evidencias", dataType: "FOTO" }],
+  },
 ];

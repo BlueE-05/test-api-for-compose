@@ -18,8 +18,8 @@ export const users: User[] = [
     name: "John Doe",
     password:
       "f6e0a1e2ac41945a9aa7ff8a8aaa0cebc12a3bcc981a929ad5cf810a090e11ae",
-    role: "Portero",
-    events: [1],
+    role: "Recepción y Descarga",
+    events: [1, 2, 3, 4],
   },
   {
     id: 3,
@@ -39,8 +39,6 @@ export const users: User[] = [
     password:
       "f6e0a1e2ac41945a9aa7ff8a8aaa0cebc12a3bcc981a929ad5cf810a090e11ae",
     role: "Operador de línea",
-    events: eventCatalog
-      .filter((event) => event.id !== 1)
-      .map((event) => event.id),
+    events: [5, 6, 7],
   },
 ];

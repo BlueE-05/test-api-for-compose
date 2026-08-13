@@ -4,7 +4,7 @@ export const serviceOrders: ServiceOrder[] = [
   // Orden 1
   {
     id: "1001",
-    idProgramacion: "P-001",
+    idProgramacion: "P-1001",
     description:
       "Servicio de sacrificio de ganado bovino, empaquetado al vacío y cuarto frío",
     clientName: "Carnes Ramos",
@@ -20,7 +20,7 @@ export const serviceOrders: ServiceOrder[] = [
   },
   // Orden 2
   {
-    idProgramacion: "P-002",
+    idProgramacion: "P-1002",
     id: "1002",
     clientName: "Central de carnes",
     description: "Servicio de sacrificio kosher y cuarto frío",
@@ -40,7 +40,7 @@ export const serviceOrders: ServiceOrder[] = [
   },
   // Orden 3
   {
-    idProgramacion: "P-003",
+    idProgramacion: "P-1003",
     id: "1003",
     clientName: "Carnes del Norte",
     description:
