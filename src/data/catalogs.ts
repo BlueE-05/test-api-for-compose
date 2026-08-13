@@ -77,6 +77,7 @@ export const eventCatalog: EventCatalog[] = [
     isAnimalRequired: false,
     configExtra: [
       { displayName: "Animales recibidos", dataType: "INTEGER" },
+      { displayName: "Tipo de ganado", dataType: "GANADO" },
       { displayName: "Sexo de animales recibidos", dataType: "SEXO" },
       { displayName: "Condiciones de llegada", dataType: "PHOTO" },
       { displayName: "Peso de salida del rancho origen", dataType: "FLOAT" },
@@ -142,7 +143,7 @@ export const eventCatalog: EventCatalog[] = [
     displayName: "Embarque",
     isAnimalRequired: false,
     configExtra: [
-      { displayName: "Placas camión de salida", dataType: "FOTO" },
+      { displayName: "Placas camión de salida", dataType: "PHOTO" },
       { displayName: "Temperatura de la unidad", dataType: "FLOAT" },
     ],
   },
@@ -150,6 +151,6 @@ export const eventCatalog: EventCatalog[] = [
     id: 11,
     displayName: "Desviaciones de embarque",
     isAnimalRequired: false,
-    configExtra: [{ displayName: "Evidencias", dataType: "FOTO" }],
+    configExtra: [{ displayName: "Evidencias", dataType: "PHOTO" }],
   },
 ];
