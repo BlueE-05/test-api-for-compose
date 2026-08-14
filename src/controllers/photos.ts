@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import fs from "node:fs";
 import path from "node:path";
 
-const UPLOAD_DIR = path.join(process.cwd(), "uploads");
+const UPLOAD_DIR = path.resolve("/tmp/uploads");
 
 const ensureUploadDir = () => {
-  const UPLOAD_DIR = path.join(process.cwd(), "tmp", "uploads");
   if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   }
