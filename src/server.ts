@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import catalogRoutes from "./routes/catalogs";
 import serviceOrderRoutes from "./routes/serviceOrders";
 import authRoutes from "./routes/auth";
+import photosRoutes from "./routes/photos";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 app.use("/catalog", catalogRoutes);
 app.use("/service-orders", serviceOrderRoutes);
 app.use("/auth", authRoutes);
+app.use("/photos", photosRoutes);
 
 dotenv.config();
 
