@@ -4,12 +4,23 @@ import path from "node:path";
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR
   ? path.resolve(process.env.UPLOAD_DIR)
-  : path.resolve(process.cwd(), "uploads");
+  : "/tmp/uploads";
+
+const getUploadDir = () => {
+  const resolvedDir = process.env.UPLOAD_DIR
+    ? path.resolve(process.env.UPLOAD_DIR)
+    : "/tmp/uploads";
+
+  if (!fs.existsSync(resolvedDir)) {
+    fs.mkdirSync(resolvedDir, { recursive: true });
+  }
+
+  return resolvedDir;
+};
 
 const ensureUploadDir = () => {
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-  }
+  const dir = getUploadDir();
+  return dir;
 };
 
 const getPhotoId = (req: Request): number | null => {
@@ -22,16 +33,18 @@ const getPhotoId = (req: Request): number | null => {
 };
 
 const findUploadedPhoto = (photoId: number): string | null => {
-  if (!fs.existsSync(UPLOAD_DIR)) {
+  const dir = getUploadDir();
+
+  if (!fs.existsSync(dir)) {
     return null;
   }
 
-  const files = fs.readdirSync(UPLOAD_DIR);
+  const files = fs.readdirSync(dir);
   const matchingFile = files.find((fileName) =>
     fileName.startsWith(`${photoId}`),
   );
 
-  return matchingFile ? path.join(UPLOAD_DIR, matchingFile) : null;
+  return matchingFile ? path.join(dir, matchingFile) : null;
 };
 
 export const PhotosController = {
@@ -54,7 +67,7 @@ export const PhotosController = {
   },
 
   createPhoto(req: Request, res: Response): void {
-    ensureUploadDir();
+    const dir = ensureUploadDir();
 
     const files = (req as any).files ?? {};
     const file = files.file?.[0] ?? files.photo?.[0] ?? (req as any).file;
@@ -69,7 +82,7 @@ export const PhotosController = {
 
     const photoId = Date.now();
     const extension = path.extname(file.originalname) || ".jpg";
-    const destinationPath = path.join(UPLOAD_DIR, `${photoId}${extension}`);
+    const destinationPath = path.join(dir, `${photoId}${extension}`);
 
     fs.writeFileSync(destinationPath, file.buffer);
 
