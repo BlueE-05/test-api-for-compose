@@ -35,10 +35,50 @@ export const ServiceOrdersController = {
     return events;
   },
 
-  // async createEventForServiceOrder(
-  //   req: Request,
-  //   res: Response,
-  // ): Promise<SanityMessage> {
-  //   const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-  //   return
+  async createEventForServiceOrder(req: Request, res: Response): Promise<void> {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+
+    if (!id) {
+      res.status(400).json({
+        message: "Invalid service order id.",
+      });
+      return;
+    }
+
+    const { eventTypeId, date, description, animals, additionals } =
+      req.body ?? {};
+
+    if (
+      eventTypeId === undefined ||
+      date === undefined ||
+      description === undefined ||
+      !Array.isArray(additionals)
+    ) {
+      res.status(400).json({
+        message:
+          "Invalid event payload. Required fields: eventTypeId, date, description, additionals.",
+      });
+      return;
+    }
+
+    const createdEvent = await ServiceOrderService.createEventForServiceOrder(
+      id,
+      {
+        eventTypeId,
+        date,
+        description,
+        animals,
+        additionals,
+      },
+    );
+
+    if (!createdEvent) {
+      res.status(404).json({
+        message: "Service order not found.",
+      });
+      return;
+    }
+
+    res.status(201).json(createdEvent);
+  },
 };
