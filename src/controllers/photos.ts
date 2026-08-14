@@ -2,26 +2,28 @@ import { Request, Response } from "express";
 import fs from "node:fs";
 import path from "node:path";
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR
-  ? path.resolve(process.env.UPLOAD_DIR)
-  : "/tmp/uploads";
+const candidateDirs = [
+  process.env.UPLOAD_DIR ? path.resolve(process.env.UPLOAD_DIR) : null,
+  "/tmp/uploads",
+  path.resolve(process.cwd(), "uploads"),
+].filter(Boolean) as string[];
 
 const getUploadDir = () => {
-  const resolvedDir = process.env.UPLOAD_DIR
-    ? path.resolve(process.env.UPLOAD_DIR)
-    : "/tmp/uploads";
-
-  if (!fs.existsSync(resolvedDir)) {
-    fs.mkdirSync(resolvedDir, { recursive: true });
+  for (const dir of candidateDirs) {
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      return dir;
+    } catch {
+      // Try the next fallback directory if this one is not writable.
+    }
   }
 
-  return resolvedDir;
+  return "/tmp/uploads";
 };
 
-const ensureUploadDir = () => {
-  const dir = getUploadDir();
-  return dir;
-};
+const ensureUploadDir = () => getUploadDir();
 
 const getPhotoId = (req: Request): number | null => {
   const rawId = Array.isArray(req.params.photoId)
@@ -33,18 +35,18 @@ const getPhotoId = (req: Request): number | null => {
 };
 
 const findUploadedPhoto = (photoId: number): string | null => {
-  const dir = getUploadDir();
+  const resolvedDir = getUploadDir();
 
-  if (!fs.existsSync(dir)) {
+  if (!fs.existsSync(resolvedDir)) {
     return null;
   }
 
-  const files = fs.readdirSync(dir);
+  const files = fs.readdirSync(resolvedDir);
   const matchingFile = files.find((fileName) =>
     fileName.startsWith(`${photoId}`),
   );
 
-  return matchingFile ? path.join(dir, matchingFile) : null;
+  return matchingFile ? path.join(resolvedDir, matchingFile) : null;
 };
 
 export const PhotosController = {

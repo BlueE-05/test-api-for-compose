@@ -20,6 +20,7 @@ app.use("/catalog", catalogRoutes);
 app.use("/service-orders", serviceOrderRoutes);
 app.use("/auth", authRoutes);
 app.use("/photos", photosRoutes);
+app.use("/uploads", express.static("/tmp/uploads"));
 
 dotenv.config();
 
