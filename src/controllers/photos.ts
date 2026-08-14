@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import fs from "node:fs";
 import path from "node:path";
 
-const UPLOAD_DIR = path.resolve("/tmp/uploads");
+const UPLOAD_DIR = path.join(process.cwd(), "uploads");
 
 const ensureUploadDir = () => {
   if (!fs.existsSync(UPLOAD_DIR)) {
