@@ -76,8 +76,7 @@ export const eventCatalog: EventCatalog[] = [
     displayName: "Recepción de animales",
     isAnimalRequired: false,
     configExtra: [
-      { displayName: "Animales recibidos", dataType: "INTEGER" },
-      { displayName: "Tipo de ganado", dataType: "GANADO" },
+      { displayName: "Animales recibidos", dataType: "ANIMAL_SELECT" },
       { displayName: "Sexo de animales recibidos", dataType: "SEXO" },
       { displayName: "Condiciones de llegada", dataType: "PHOTO" },
       { displayName: "Peso de salida del rancho origen", dataType: "FLOAT" },

@@ -12,7 +12,8 @@ type EventDataType =
   | "SEXO"
   | "MOTIVO_CANAL"
   | "MOTIVO_VISCERA"
-  | "CORRAL_SELECT";
+  | "CORRAL_SELECT"
+  | "ANIMAL_SELECT";
 
 interface Data {
   displayName: string;
