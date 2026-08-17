@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 
 import catalogRoutes from "./routes/catalogs";
 import serviceOrderRoutes from "./routes/serviceOrders";
@@ -21,8 +23,6 @@ app.use("/service-orders", serviceOrderRoutes);
 app.use("/auth", authRoutes);
 app.use("/photos", photosRoutes);
 app.use("/uploads", express.static("/tmp/uploads"));
-
-dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 

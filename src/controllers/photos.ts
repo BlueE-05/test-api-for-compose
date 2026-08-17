@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
+import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 
+dotenv.config();
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_ANON_KEY =
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_PUBLISHABLE_KEY ||
+  process.env.SUPABASE_SECRET_KEY;
 const SUPABASE_BUCKET = process.env.SUPABASE_BUCKET || "photos";
 
 const supabase =
@@ -36,12 +42,30 @@ export const PhotosController = {
       return;
     }
 
-    const fileName = `${photoId}`;
-    const { data, error } = await supabase.storage
-      .from(SUPABASE_BUCKET)
-      .download(fileName);
+    const candidateNames = [
+      `${photoId}`,
+      `${photoId}.jpg`,
+      `${photoId}.jpeg`,
+      `${photoId}.png`,
+      `${photoId}.webp`,
+    ];
 
-    if (error || !data) {
+    let data: Blob | null = null;
+    let contentType = "application/octet-stream";
+
+    for (const fileName of candidateNames) {
+      const { data: downloaded, error } = await supabase.storage
+        .from(SUPABASE_BUCKET)
+        .download(fileName);
+
+      if (!error && downloaded) {
+        data = downloaded;
+        contentType = downloaded.type || contentType;
+        break;
+      }
+    }
+
+    if (!data) {
       res.status(404).json({ message: "Photo not found." });
       return;
     }
@@ -49,7 +73,7 @@ export const PhotosController = {
     const arrayBuffer = await data.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    res.setHeader("Content-Type", data.type || "application/octet-stream");
+    res.setHeader("Content-Type", contentType);
     res.status(200).send(buffer);
   },
 
