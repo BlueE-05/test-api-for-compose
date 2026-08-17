@@ -8,7 +8,7 @@ export const events: Event[] = [
     description: "Recepción de 50 animales",
     animals: [],
     additionals: [
-      { displayName: "Fleje", dataType: "PHOTO", content: [1] },
+      { displayName: "Fleje", dataType: "PHOTO", content: [] },
       { displayName: "Kilos de llegada", dataType: "FLOAT", content: 1500 },
       { displayName: "Animales recibidos", dataType: "INTEGER", content: 100 },
       {
@@ -38,17 +38,17 @@ export const events: Event[] = [
       {
         displayName: "Guía REMO",
         dataType: "PHOTO",
-        content: [2],
+        content: [],
       },
       {
         displayName: "Certificado Zoosanitario",
         dataType: "PHOTO",
-        content: [3],
+        content: [],
       },
       {
         displayName: "Licencia Chofer",
         dataType: "PHOTO",
-        content: [4],
+        content: [],
       },
       { displayName: "Placas Camión", dataType: "TEXT", content: "ABC-1234" },
     ],
