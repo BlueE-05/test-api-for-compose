@@ -8,12 +8,12 @@ type EventDataType =
   | "PHOTO"
   | "CORRAL"
   | "BOOLEAN"
-  | "GANADO"
-  | "SEXO"
+  | "LIVESTOCK"
+  | "SEX"
   | "MOTIVO_CANAL"
   | "MOTIVO_VISCERA"
   | "CORRAL_SELECT"
-  | "ANIMAL_SELECT";
+  | "ANIMAL_DETAIL";
 
 interface Data {
   displayName: string;
