@@ -1,23 +1,66 @@
 # API Test
 
-API de ejemplo para catálogos, autenticación y órdenes de servicio.
+API Express con datos mock en memoria para autenticación, catálogos, órdenes de servicio y almacenamiento de fotos con Supabase.
 
-## Ejecutar la API
+## Requisitos
+
+- Node.js 18+
+- npm
+- opcional: cuenta de Supabase con un bucket público o con permisos adecuados para subir y descargar archivos
+
+## Instalación
 
 ```bash
 npm install
+```
+
+## Ejecutar en desarrollo
+
+```bash
 npm run dev
 ```
 
-Por defecto la app corre en:
+La aplicación queda disponible en:
 
 ```text
 http://localhost:3000
 ```
 
----
+También puedes compilarla y ejecutarla en producción:
 
-## Endpoints
+```bash
+npm run build
+npm start
+```
+
+## Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+PORT=3000
+SUPABASE_URL=https://xxxxx.supabase.co
+SUPABASE_ANON_KEY=tu-anon-key
+SUPABASE_BUCKET=photos
+```
+
+> `SUPABASE_URL` y `SUPABASE_ANON_KEY` son requeridos para que los endpoints de fotos funcionen.
+
+## Rutas principales
+
+### Estado del servidor
+
+#### GET /
+
+Devuelve un texto simple para comprobar que la API está levantada.
+
+Respuesta:
+
+```text
+API Running
+```
+
+---
 
 ### Autenticación
 
@@ -25,7 +68,7 @@ http://localhost:3000
 
 Inicia sesión con un usuario mock.
 
-Body:
+Ejemplo de body:
 
 ```json
 {
@@ -34,7 +77,7 @@ Body:
 }
 ```
 
-Respuesta exitosa:
+Respuesta exitosa (`200`):
 
 ```json
 {
@@ -49,7 +92,7 @@ Respuesta exitosa:
 }
 ```
 
-Error:
+Respuesta inválida (`401`):
 
 ```json
 {
@@ -61,9 +104,11 @@ Error:
 
 ### Catálogos
 
+Todos los endpoints de catálogo se montan bajo `/catalog`.
+
 #### GET /catalog/animals
 
-Obtiene todos los animales del catálogo.
+Obtiene todos los animales.
 
 #### GET /catalog/animals/:id
 
@@ -71,7 +116,7 @@ Obtiene un animal por ID.
 
 #### GET /catalog/services
 
-Obtiene todos los servicios del catálogo.
+Obtiene todos los servicios.
 
 #### GET /catalog/services/:id
 
@@ -79,7 +124,7 @@ Obtiene un servicio por ID.
 
 #### GET /catalog/events
 
-Obtiene todos los tipos de eventos del catálogo.
+Obtiene todos los tipos de eventos.
 
 #### GET /catalog/events/:id
 
@@ -89,17 +134,19 @@ Obtiene un tipo de evento por ID.
 
 Obtiene los corrales disponibles.
 
-#### GET /catalog/motivos/canal
+#### GET /catalog/motivos-canal
 
 Obtiene motivos de canal.
 
-#### GET /catalog/motivos/viscera
+#### GET /catalog/motivos-viscera
 
 Obtiene motivos de viscera.
 
 ---
 
-### Service Orders
+### Órdenes de servicio
+
+Todos los endpoints se montan bajo `/service-orders`.
 
 #### GET /service-orders
 
@@ -107,7 +154,7 @@ Obtiene todas las órdenes de servicio.
 
 #### GET /service-orders/:id/events
 
-Obtiene los eventos asociados a una orden de servicio.
+Obtiene los eventos asociados a una orden por su ID.
 
 Ejemplo:
 
@@ -115,7 +162,7 @@ Ejemplo:
 GET /service-orders/1001/events
 ```
 
-Respuesta:
+Respuesta ejemplo:
 
 ```json
 [
@@ -138,9 +185,9 @@ Respuesta:
 
 #### POST /service-orders/:id/events
 
-Agrega un nuevo evento a la lista de eventos de una orden.
+Crea un evento para una orden existente.
 
-Ejemplo de body:
+Body ejemplo:
 
 ```json
 {
@@ -168,17 +215,12 @@ Ejemplo de body:
           "qty": 50
         }
       ]
-    },
-    {
-      "displayName": "Foto del fleje",
-      "type": "PHOTO",
-      "content": [331]
     }
   ]
 }
 ```
 
-Respuesta exitosa:
+Respuesta exitosa (`201`):
 
 ```json
 {
@@ -207,10 +249,62 @@ Si la orden no existe:
 
 ---
 
-## Notas
+### Fotos
 
-- Los datos se mantienen en memoria dentro de la app, no en base de datos.
-- Las rutas están montadas en el servidor con los prefijos:
+Los endpoints de fotos se montan bajo `/photos`.
+
+#### POST /photos
+
+Sube una imagen con multipart/form-data usando el campo `file` o `photo`.
+
+Ejemplo con curl:
+
+```bash
+curl -X POST http://localhost:3000/photos \
+  -F "file=@/ruta/a/imagen.jpg"
+```
+
+Respuesta exitosa (`200`):
+
+```json
+{
+  "success": true,
+  "photoId": 1786745151428,
+  "url": "https://xxxxx.supabase.co/storage/v1/object/public/photos/1786745151428.jpg"
+}
+```
+
+#### GET /photos/:photoId
+
+Obtiene la imagen desde Supabase Storage.
+
+Ejemplo:
+
+```http
+GET /photos/1786745151428
+```
+
+---
+
+## Notas de implementación
+
+- Los datos se mantienen en memoria dentro de la app; no hay base de datos.
+- La API se monta con los prefijos:
   - `/auth`
   - `/catalog`
   - `/service-orders`
+  - `/photos`
+- El bucket de Supabase debe existir y tener permisos públicos o configurados adecuadamente para que la subida y descarga funcionen.
+- Si `SUPABASE_URL` o `SUPABASE_ANON_KEY` no están configurados, los endpoints de fotos devolverán un error `500`.
+
+## Estructura del proyecto
+
+```text
+src/
+  server.ts
+  controllers/
+  data/
+  models/
+  routes/
+  services/
+```

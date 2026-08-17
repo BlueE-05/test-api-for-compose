@@ -14,7 +14,7 @@ router.get("/events/:id", CatalogController.getEvent);
 
 router.get("/corrals", CatalogController.getCorrals);
 
-router.get("/motivos/canal", CatalogController.getMotivos);
-router.get("/motivos/viscera", CatalogController.getMotivos);
+router.get("/motivos-canal", CatalogController.getMotivos);
+router.get("/motivos-viscera", CatalogController.getMotivos);
 
 export default router;

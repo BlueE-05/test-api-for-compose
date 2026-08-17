@@ -1,29 +1,14 @@
 import { Request, Response } from "express";
-import fs from "node:fs";
-import path from "node:path";
+import { createClient } from "@supabase/supabase-js";
 
-const candidateDirs = [
-  process.env.UPLOAD_DIR ? path.resolve(process.env.UPLOAD_DIR) : null,
-  "/tmp/uploads",
-  path.resolve(process.cwd(), "uploads"),
-].filter(Boolean) as string[];
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_BUCKET = process.env.SUPABASE_BUCKET || "photos";
 
-const getUploadDir = () => {
-  for (const dir of candidateDirs) {
-    try {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-      return dir;
-    } catch {
-      // Try the next fallback directory if this one is not writable.
-    }
-  }
-
-  return "/tmp/uploads";
-};
-
-const ensureUploadDir = () => getUploadDir();
+const supabase =
+  SUPABASE_URL && SUPABASE_ANON_KEY
+    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
 
 const getPhotoId = (req: Request): number | null => {
   const rawId = Array.isArray(req.params.photoId)
@@ -34,23 +19,8 @@ const getPhotoId = (req: Request): number | null => {
   return Number.isFinite(photoId) ? photoId : null;
 };
 
-const findUploadedPhoto = (photoId: number): string | null => {
-  const resolvedDir = getUploadDir();
-
-  if (!fs.existsSync(resolvedDir)) {
-    return null;
-  }
-
-  const files = fs.readdirSync(resolvedDir);
-  const matchingFile = files.find((fileName) =>
-    fileName.startsWith(`${photoId}`),
-  );
-
-  return matchingFile ? path.join(resolvedDir, matchingFile) : null;
-};
-
 export const PhotosController = {
-  getPhoto(req: Request, res: Response): void {
+  async getPhoto(req: Request, res: Response): Promise<void> {
     const photoId = getPhotoId(req);
 
     if (photoId === null) {
@@ -58,19 +28,32 @@ export const PhotosController = {
       return;
     }
 
-    const filePath = findUploadedPhoto(photoId);
+    if (!supabase) {
+      res.status(500).json({
+        message:
+          "Supabase storage is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY.",
+      });
+      return;
+    }
 
-    if (!filePath) {
+    const fileName = `${photoId}`;
+    const { data, error } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .download(fileName);
+
+    if (error || !data) {
       res.status(404).json({ message: "Photo not found." });
       return;
     }
 
-    res.sendFile(filePath);
+    const arrayBuffer = await data.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    res.setHeader("Content-Type", data.type || "application/octet-stream");
+    res.status(200).send(buffer);
   },
 
-  createPhoto(req: Request, res: Response): void {
-    const dir = ensureUploadDir();
-
+  async createPhoto(req: Request, res: Response): Promise<void> {
     const files = (req as any).files ?? {};
     const file = files.file?.[0] ?? files.photo?.[0] ?? (req as any).file;
 
@@ -82,15 +65,38 @@ export const PhotosController = {
       return;
     }
 
-    const photoId = Date.now();
-    const extension = path.extname(file.originalname) || ".jpg";
-    const destinationPath = path.join(dir, `${photoId}${extension}`);
+    if (!supabase) {
+      res.status(500).json({
+        message:
+          "Supabase storage is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY.",
+      });
+      return;
+    }
 
-    fs.writeFileSync(destinationPath, file.buffer);
+    const photoId = Date.now();
+    const extension = file.originalname?.split(".").pop() || "jpg";
+    const fileName = `${photoId}.${extension}`;
+
+    const { error } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype || "image/jpeg",
+        upsert: false,
+      });
+
+    if (error) {
+      res.status(500).json({ message: error.message });
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from(SUPABASE_BUCKET)
+      .getPublicUrl(fileName);
 
     res.status(200).json({
       success: true,
       photoId,
+      url: publicUrlData.publicUrl,
     });
   },
 };
