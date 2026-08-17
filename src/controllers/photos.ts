@@ -16,6 +16,42 @@ const supabase =
     ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 
+const MIME_TO_EXTENSION: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+  "image/bmp": "bmp",
+  "image/tiff": "tiff",
+  "image/heic": "heic",
+  "image/heif": "heif",
+  "image/avif": "avif",
+};
+
+const SAFE_EXTENSIONS = new Set(Object.values(MIME_TO_EXTENSION));
+
+const getSafeImageExtension = (file: any): string => {
+  const mimeType =
+    typeof file?.mimetype === "string" ? file.mimetype.toLowerCase() : "";
+  const extensionFromMime = MIME_TO_EXTENSION[mimeType];
+
+  if (extensionFromMime) {
+    return extensionFromMime;
+  }
+
+  const originalName =
+    typeof file?.originalname === "string" ? file.originalname : "";
+  const originalNameParts = originalName.toLowerCase().split(".");
+  const candidateExtension =
+    originalNameParts.length > 1 ? originalNameParts.pop() : undefined;
+
+  if (candidateExtension && SAFE_EXTENSIONS.has(candidateExtension)) {
+    return candidateExtension;
+  }
+
+  return "jpg";
+};
+
 const getPhotoId = (req: Request): number | null => {
   const rawId = Array.isArray(req.params.photoId)
     ? req.params.photoId[0]
@@ -48,6 +84,12 @@ export const PhotosController = {
       `${photoId}.jpeg`,
       `${photoId}.png`,
       `${photoId}.webp`,
+      `${photoId}.gif`,
+      `${photoId}.bmp`,
+      `${photoId}.tiff`,
+      `${photoId}.heic`,
+      `${photoId}.heif`,
+      `${photoId}.avif`,
     ];
 
     let data: Blob | null = null;
@@ -89,6 +131,23 @@ export const PhotosController = {
       return;
     }
 
+    if (!Buffer.isBuffer(file.buffer) || file.buffer.length === 0) {
+      res.status(400).json({
+        message: "Invalid uploaded file. Expected a non-empty image buffer.",
+      });
+      return;
+    }
+
+    const mimeType =
+      typeof file.mimetype === "string" ? file.mimetype.toLowerCase() : "";
+
+    if (!mimeType.startsWith("image/")) {
+      res.status(400).json({
+        message: "Invalid file type. Only image uploads are allowed.",
+      });
+      return;
+    }
+
     if (!supabase) {
       res.status(500).json({
         message:
@@ -98,13 +157,13 @@ export const PhotosController = {
     }
 
     const photoId = Date.now();
-    const extension = file.originalname?.split(".").pop() || "jpg";
+    const extension = getSafeImageExtension(file);
     const fileName = `${photoId}.${extension}`;
 
     const { error } = await supabase.storage
       .from(SUPABASE_BUCKET)
       .upload(fileName, file.buffer, {
-        contentType: file.mimetype || "image/jpeg",
+        contentType: mimeType || "image/jpeg",
         upsert: false,
       });
 
