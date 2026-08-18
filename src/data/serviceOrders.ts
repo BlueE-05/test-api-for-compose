@@ -16,7 +16,7 @@ export const serviceOrders: ServiceOrder[] = [
         displayName: "vaca",
       },
     ],
-    events: [1, 2, 3, 4],
+    events: [],
   },
   // Orden 2
   {
@@ -36,7 +36,7 @@ export const serviceOrders: ServiceOrder[] = [
       },
     ],
     status: "En camino",
-    events: [5, 6],
+    events: [],
   },
   // Orden 3
   {
