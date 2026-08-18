@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
+import { UploadResponse } from "../models/Response";
 
 dotenv.config();
 
@@ -119,7 +120,7 @@ export const PhotosController = {
     res.status(200).send(buffer);
   },
 
-  async createPhoto(req: Request, res: Response): Promise<void> {
+  async createPhoto(req: Request, res: Response): Promise<UploadResponse> {
     const files = (req as any).files ?? {};
     const file = files.file?.[0] ?? files.photo?.[0] ?? (req as any).file;
 
@@ -128,14 +129,14 @@ export const PhotosController = {
         message:
           "No image file uploaded. Send a multipart/form-data file with the field 'file' or 'photo'.",
       });
-      return;
+      return { success: false, id: null };
     }
 
     if (!Buffer.isBuffer(file.buffer) || file.buffer.length === 0) {
       res.status(400).json({
         message: "Invalid uploaded file. Expected a non-empty image buffer.",
       });
-      return;
+      return { success: false, id: null };
     }
 
     const mimeType =
@@ -145,7 +146,7 @@ export const PhotosController = {
       res.status(400).json({
         message: "Invalid file type. Only image uploads are allowed.",
       });
-      return;
+      return { success: false, id: null };
     }
 
     if (!supabase) {
@@ -153,12 +154,12 @@ export const PhotosController = {
         message:
           "Supabase storage is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY.",
       });
-      return;
+      return { success: false, id: null };
     }
 
-    const photoId = Date.now();
+    const id = Date.now();
     const extension = getSafeImageExtension(file);
-    const fileName = `${photoId}.${extension}`;
+    const fileName = `${id}.${extension}`;
 
     const { error } = await supabase.storage
       .from(SUPABASE_BUCKET)
@@ -169,17 +170,13 @@ export const PhotosController = {
 
     if (error) {
       res.status(500).json({ message: error.message });
-      return;
+      return { success: false, id: null };
     }
-
-    const { data: publicUrlData } = supabase.storage
-      .from(SUPABASE_BUCKET)
-      .getPublicUrl(fileName);
 
     res.status(200).json({
       success: true,
-      photoId,
-      url: publicUrlData.publicUrl,
+      id: id,
     });
+    return { success: true, id };
   },
 };

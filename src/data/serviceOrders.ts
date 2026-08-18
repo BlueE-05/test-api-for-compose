@@ -57,5 +57,6 @@ export const serviceOrders: ServiceOrder[] = [
       },
     ],
     status: "En corral",
+    events: [],
   },
 ];
