@@ -64,7 +64,7 @@ export const eventCatalog: EventCatalog[] = [
     displayName: "Recepción de documentos",
     isAnimalRequired: false,
     configExtra: [
-      { displayName: "Guía REMO", dataType: "PHOTO" },
+      { displayName: "Guía REEMO", dataType: "PHOTO" },
       { displayName: "Certificado Zoosanitario", dataType: "PHOTO" },
       { displayName: "Licencia Chofer", dataType: "PHOTO" },
       { displayName: "Placas Camión", dataType: "PHOTO" },
@@ -103,7 +103,10 @@ export const eventCatalog: EventCatalog[] = [
     id: 5,
     displayName: "Animal caído en corral",
     isAnimalRequired: true,
-    configExtra: [{ displayName: "Foto animal", dataType: "PHOTO" }],
+    configExtra: [
+      { displayName: "Corral", dataType: "CORRAL_SELECT" },
+      { displayName: "Foto animal", dataType: "PHOTO" },
+    ],
   },
   {
     id: 6,
