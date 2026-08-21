@@ -1,21 +1,8 @@
 import { Request, Response } from "express";
-import dotenv from "dotenv";
-import { createClient } from "@supabase/supabase-js";
 import { UploadResponse } from "../models/Response";
+import { supabase } from "../services/supabase";
 
-dotenv.config();
-
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_PUBLISHABLE_KEY ||
-  process.env.SUPABASE_SECRET_KEY;
 const SUPABASE_BUCKET = process.env.SUPABASE_BUCKET || "photos";
-
-const supabase =
-  SUPABASE_URL && SUPABASE_ANON_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
 
 const MIME_TO_EXTENSION: Record<string, string> = {
   "image/jpeg": "jpg",
