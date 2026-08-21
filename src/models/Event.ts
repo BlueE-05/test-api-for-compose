@@ -18,7 +18,6 @@ type EventDataType =
 interface Data {
   displayName: string;
   dataType?: EventDataType;
-  type?: EventDataType;
   content: any;
 }
 

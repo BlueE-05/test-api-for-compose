@@ -46,6 +46,18 @@ SUPABASE_BUCKET=photos
 
 > `SUPABASE_URL` y `SUPABASE_ANON_KEY` son requeridos para que los endpoints de fotos funcionen.
 
+## Tablas de Supabase
+
+La estructura para guardar órdenes de servicio y eventos está en
+[`supabase/schema.sql`](supabase/schema.sql). Ejecútala en el SQL Editor de
+Supabase. Crea las tablas `service_orders`, `service_order_animals` y
+`service_order_events`; los eventos se relacionan directamente con su orden y
+los campos dinámicos de `additionals` se guardan como `jsonb`.
+
+La migración habilita Row Level Security (RLS), por lo que debes crear las
+políticas de lectura/escritura que correspondan antes de acceder a estas tablas
+con una clave pública.
+
 ## Rutas principales
 
 ### Estado del servidor
